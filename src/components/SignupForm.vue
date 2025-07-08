@@ -1,25 +1,47 @@
 <script setup lang="ts">
 import { Field, Form } from "vee-validate";
 import * as yup from "yup";
-import {useUserStore} from "../stores/userStore.ts";
-import {ref} from "vue";
-import type {ISignupForm} from "../interfaces/ISignupForm.ts";
+import { useUserStore } from "../stores/userStore.ts";
+import { ref, type Ref } from "vue";
+import type { ISignupForm } from "../interfaces/ISignupForm.ts";
 
-const schema = yup.object({
+const schema: yup.ObjectSchema<{
+  username: string;
+  email: string;
+  profile_picture: File | null;
+  password: string;
+}> = yup.object({
   username: yup.string().required("Username is required").min(3, "Username must be at least 3 characters"),
   email: yup.string().required("Email is required").email("Email must be valid"),
-  profile_picture: yup.mixed().nullable(),
+  profile_picture: yup.mixed<File>().nullable().notRequired().transform((value) => (value === undefined ? null : value)) as yup.Schema<File | null>,
   password: yup.string().required("Password is required").min(6, "Password must be at least 6 characters"),
 });
 
-const userStore = useUserStore()
-const { signup } = userStore
+const userStore = useUserStore();
+const signup: (userdata: ISignupForm) => Promise<void> = userStore.signup;
 
-const signupError = ref<string>('');
+const signupError: Ref<string> = ref('');
+const imagePreview: Ref<string | null> = ref(null);
 
-const onSubmit = async (values: ISignupForm, { setFieldError }: any) => {
+const handleFileChange = (file: File | null, handleChange: (file: File | null) => void): void => {
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = (e: ProgressEvent<FileReader>) => {
+      imagePreview.value = e.target?.result as string;
+    };
+    reader.readAsDataURL(file);
+  } else {
+    imagePreview.value = null;
+  }
+  handleChange(file);
+};
+
+const onSubmit = async (
+  values: ISignupForm,
+  { setFieldError }: { setFieldError: (field: string, message: string) => void }
+): Promise<void> => {
   try {
-    await signup(values)
+    await signup(values);
   } catch (error: any) {
     if (error.response?.data) {
       const errorData = error.response.data;
@@ -53,7 +75,7 @@ const onSubmit = async (values: ISignupForm, { setFieldError }: any) => {
       signupError.value = error.message || 'Signup failed. Please try again.';
     }
   }
-}
+};
 </script>
 
 <template>
@@ -95,16 +117,33 @@ const onSubmit = async (values: ISignupForm, { setFieldError }: any) => {
       </template>
     </Field>
     <Field name="profile_picture" v-slot="{ field, meta, errors, handleChange }">
-      <v-file-input
-        label="Profile Picture"
-        variant="outlined"
-        :error="!!errors.length"
-        :error-messages="errors"
-        class="mb-4"
-        accept="image/*"
-        :model-value="field.value"
-        @update:model-value="files => handleChange(Array.isArray(files) ? files[0] : files)"
-      />
+      <div class="profile-picture-container">
+        <div class="circular-upload" @click="$refs.fileInput.click()">
+          <input
+              ref="fileInput"
+              type="file"
+              accept="image/*"
+              style="display: none"
+              @change="(e) => handleFileChange(e.target?.files[0], handleChange)"
+          />
+          <div v-if="imagePreview" class="image-preview">
+            <img
+                :src="imagePreview"
+                alt="Profile picture preview"
+                class="preview-image"
+            />
+          </div>
+          <div v-else class="upload-placeholder">
+            <v-icon size="48" color="grey">mdi-camera-plus</v-icon>
+            <div class="upload-text">Add Photo</div>
+          </div>
+        </div>
+        <div v-if="errors.length" class="error-messages">
+          <div v-for="error in errors" :key="error" class="error-text">
+            {{ error }}
+          </div>
+        </div>
+      </div>
     </Field>
     <Field name="password">
       <template #default="slotProps">
@@ -127,4 +166,71 @@ const onSubmit = async (values: ISignupForm, { setFieldError }: any) => {
 </template>
 
 <style scoped>
+.profile-picture-container {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.circular-upload {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 2px dashed #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  background-color: #fafafa;
+}
+
+.circular-upload:hover {
+  border-color: #1976d2;
+  background-color: #f5f5f5;
+}
+
+.upload-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 1rem;
+}
+
+.upload-text {
+  font-size: 12px;
+  color: #666;
+  margin-top: 4px;
+}
+
+.image-preview {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.preview-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.error-messages {
+  margin-top: 8px;
+  text-align: center;
+}
+
+.error-text {
+  color: #d32f2f;
+  font-size: 12px;
+  line-height: 1.2;
+}
 </style>
