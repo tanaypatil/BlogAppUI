@@ -89,7 +89,7 @@ const onSubmit = async (
     >
       {{ signupError }}
     </v-alert>
-    <Field name="profile_picture" v-slot="{ field, meta, errors, handleChange }">
+    <Field name="profile_picture" v-slot="{ errors, handleChange }">
       <div class="profile-picture-container">
         <div class="circular-upload" @click="$refs.fileInput.click()">
           <input

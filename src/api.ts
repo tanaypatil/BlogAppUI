@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 const OAUTH2_TOKEN_URL = "/o/token/"
-const CLIENT_ID = ""
-const CLIENT_SECRET = ""
+const CLIENT_ID = import.meta.env.CLIENT_ID
+const CLIENT_SECRET = import.meta.env.CLIENT_SECRET
 
 const api = axios.create({
     baseURL: 'http://localhost:8000',
