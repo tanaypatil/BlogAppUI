@@ -89,33 +89,6 @@ const onSubmit = async (
     >
       {{ signupError }}
     </v-alert>
-    <Field name="username">
-      <template #default="slotProps">
-        <v-text-field
-          v-bind="slotProps.field"
-          label="Username"
-          variant="outlined"
-          :error="!!slotProps.errors.length"
-          :error-messages="slotProps.errors"
-          class="mb-4"
-          required
-        />
-      </template>
-    </Field>
-    <Field name="email">
-      <template #default="slotProps">
-        <v-text-field
-          v-bind="slotProps.field"
-          label="Email"
-          type="email"
-          variant="outlined"
-          :error="!!slotProps.errors.length"
-          :error-messages="slotProps.errors"
-          class="mb-4"
-          required
-        />
-      </template>
-    </Field>
     <Field name="profile_picture" v-slot="{ field, meta, errors, handleChange }">
       <div class="profile-picture-container">
         <div class="circular-upload" @click="$refs.fileInput.click()">
@@ -144,6 +117,33 @@ const onSubmit = async (
           </div>
         </div>
       </div>
+    </Field>
+    <Field name="username">
+      <template #default="slotProps">
+        <v-text-field
+          v-bind="slotProps.field"
+          label="Username"
+          variant="outlined"
+          :error="!!slotProps.errors.length"
+          :error-messages="slotProps.errors"
+          class="mb-4"
+          required
+        />
+      </template>
+    </Field>
+    <Field name="email">
+      <template #default="slotProps">
+        <v-text-field
+          v-bind="slotProps.field"
+          label="Email"
+          type="email"
+          variant="outlined"
+          :error="!!slotProps.errors.length"
+          :error-messages="slotProps.errors"
+          class="mb-4"
+          required
+        />
+      </template>
     </Field>
     <Field name="password">
       <template #default="slotProps">
