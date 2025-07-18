@@ -51,7 +51,7 @@ export const useUserStore = defineStore('userStore', () => {
             refreshToken.value = response.data.refresh_token
             localStorage.setItem('accessToken', accessToken.value ?? '')
             localStorage.setItem('refreshToken', refreshToken.value ?? '')
-            window.location.reload()
+            // window.location.reload()
         } catch (error) {
             accessToken.value = null
             throw error
@@ -94,6 +94,9 @@ export const useUserStore = defineStore('userStore', () => {
         async error => {
             const originalRequest = error.config;
             if (error.response && error.response.status === 401 && !originalRequest._retry) {
+                if (!accessToken.value) {
+                    return Promise.reject(error);
+                }
                 originalRequest._retry = true;
                 try {
                     await refreshAccessToken();

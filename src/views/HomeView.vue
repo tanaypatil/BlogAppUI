@@ -10,7 +10,7 @@ import BlogsList from "../components/BlogsList.vue";
 
 <template>
 
-<!--  <UserAuth v-if="!userLoggedIn"/>-->
+<!--<UserAuth v-if="!userLoggedIn"/>-->
   <BlogsList />
 </template>
 
