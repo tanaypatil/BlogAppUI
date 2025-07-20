@@ -8,4 +8,5 @@ export interface Blog {
     tags: string[];
     created: string;
     updated: string;
+    profile_picture: string;
 }

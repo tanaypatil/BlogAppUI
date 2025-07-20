@@ -29,7 +29,7 @@ async function load({done}: any) {
 <template>
   <v-container>
     <v-row>
-      <v-col cols="12">
+      <v-col cols="4">
         <v-infinite-scroll
             :items="blogs"
             @load="load"
@@ -42,6 +42,7 @@ async function load({done}: any) {
               :slug="blog.slug"
               :body="blog.body"
               :author="blog.author"
+              :profile_picture="blog.profile_picture"
           />
           <template v-slot:loading>
             <v-alert type="info">This is taking a very long time...</v-alert>
