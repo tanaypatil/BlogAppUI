@@ -21,16 +21,16 @@ const {userLoggedIn, logout} = userStore
 
 <template>
   <v-app-bar class="px-3" color="blue-grey-darken-4">
-    <v-toolbar-title>My Blogs</v-toolbar-title>
+    <v-toolbar-title class="text-amber">Only Blogs</v-toolbar-title>
     <v-spacer></v-spacer>
-    <v-btn v-if="userLoggedIn" @click="logout">Logout</v-btn>
-    <AuthDialog v-else />
     <v-btn
-        :prepend-icon="theme === 'light' ? 'mdi-weather-sunny' : 'mdi-weather-night'"
-        text="Toggle Theme"
+        title="Toggle Theme"
+        :icon="theme === 'light' ? 'mdi-weather-sunny' : 'mdi-weather-night'"
         slim
         @click="updateTheme"
     ></v-btn>
+    <v-btn v-if="userLoggedIn" @click="logout" icon="mdi-logout" title="Logout"></v-btn>
+    <AuthDialog v-else/>
   </v-app-bar>
 </template>
 

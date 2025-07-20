@@ -8,7 +8,7 @@ import UserAuth from "./UserAuth.vue";
 <template>
   <v-dialog max-width="500">
     <template v-slot:activator="{ props: activatorProps }">
-      <v-btn v-bind="activatorProps">Signup/Login</v-btn>
+      <v-btn icon="mdi-login" title="Login/Signup" v-bind="activatorProps"></v-btn>
     </template>
 
     <template v-slot:default>
