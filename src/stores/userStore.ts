@@ -35,6 +35,7 @@ export const useUserStore = defineStore('userStore', () => {
 
     async function login(loginForm: ILoginForm): Promise<void> {
         try {
+            console.log(CLIENT_ID)
             const response = await api.post(OAUTH2_TOKEN_URL, {
                 grant_type: 'password',
                 username: loginForm.username,
@@ -51,7 +52,7 @@ export const useUserStore = defineStore('userStore', () => {
             refreshToken.value = response.data.refresh_token
             localStorage.setItem('accessToken', accessToken.value ?? '')
             localStorage.setItem('refreshToken', refreshToken.value ?? '')
-            // window.location.reload()
+            window.location.reload()
         } catch (error) {
             accessToken.value = null
             throw error

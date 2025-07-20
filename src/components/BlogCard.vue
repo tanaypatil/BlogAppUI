@@ -12,7 +12,7 @@ const props = defineProps<{
 
   <v-card
       class="mx-auto"
-      :subtitle="`${props.author}`"
+      :subtitle="props.author"
       rounded elevation="32"
       border
   >
