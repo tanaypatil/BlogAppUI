@@ -53,7 +53,7 @@ function reopen() {
 </template>
 
 <style>
-.v-fab--bottom {
+.v-fab--bottom .v-fab__container {
   bottom: 32px !important;
   right: 32px !important;
 }
