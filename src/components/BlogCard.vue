@@ -7,6 +7,7 @@ const props = defineProps<{
   body: string,
   author: number,
   profile_picture: string,
+  tags: string[]
 }>()
 
 const WORD_LIMIT = 150;
@@ -38,7 +39,11 @@ const previewText = computed(() =>
       </span>
     </template>
     <template v-slot:subtitle>
-
+      <div class="bg-amber mt-1 rounded">
+        <v-chip class="ma-2" variant="elevated" v-for="tag in props.tags">
+          {{ tag }}
+        </v-chip>
+      </div>
     </template>
 
     <v-card-text class="bg-surface-light pt-4">
