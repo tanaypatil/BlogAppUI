@@ -1,32 +1,18 @@
 <script setup lang="ts">
-import {ref} from 'vue';
 import BlogCard from './BlogCard.vue';
-import {getBlogs} from '../api/blogsApi.ts';
-import type {Blog} from "../interfaces/Blog.ts";
-import type {BlogResponse} from "../interfaces/BlogResponse.ts";
+import {useBlogStore} from "../stores/blogStore.ts";
+import {storeToRefs} from "pinia";
 
-const blogsResponse = ref<BlogResponse | null>()
-const blogs = ref<Array<Blog>>([])
+const blogStore = useBlogStore()
+const { blogs } = storeToRefs(blogStore)
+const { getBlogs } = blogStore
 
 async function load({done}: any) {
-  blogsResponse.value = await getBlogs(blogsResponse.value?.next);
-  if (blogsResponse.value == null) {
-    done('error')
-  } else if (!blogsResponse.value.results || blogsResponse.value.results.length === 0) {
-    done('empty')
-  } else {
-    blogs.value.push(...blogsResponse.value.results);
-    if (!blogsResponse.value.next) {
-      done('empty')
-    } else {
-      done('ok')
-    }
-  }
+  done(await getBlogs())
 }
 </script>
 
 <template>
-
   <v-infinite-scroll
       :items="blogs"
       @load="load"

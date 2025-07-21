@@ -7,7 +7,7 @@ const theme: Ref<string> = ref('light')
 </script>
 
 <template>
-  <v-app :theme="theme" style="background-image: url('/abstract.png'); background-size: contain">
+  <v-app :theme="theme">
 
     <AppBar v-model:theme="theme" />
 

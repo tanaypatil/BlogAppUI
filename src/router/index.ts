@@ -1,12 +1,18 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from "../views/HomeView.vue"
 import {useUserStore} from "../stores/userStore.ts";
+import BlogView from "../views/BlogView.vue";
 
 const routes = [
     {
         path: '/',
         name: 'home',
         component: HomeView
+    },
+    {
+        path: '/blog/:slug',
+        name: 'blog',
+        component: BlogView
     },
     {
         path: '/:catchall(.*)*',

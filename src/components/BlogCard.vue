@@ -10,11 +10,10 @@ const props = defineProps<{
   tags: string[]
 }>()
 
-const WORD_LIMIT = 150;
+const WORD_LIMIT = 80;
 const words = props.body.split(/\s+/);
-const isTruncated = computed(() => words.length > WORD_LIMIT);
 const previewText = computed(() =>
-  isTruncated.value ? words.slice(0, WORD_LIMIT).join(' ') : props.body
+  words.slice(0, WORD_LIMIT).join(' ')
 );
 </script>
 
@@ -48,10 +47,11 @@ const previewText = computed(() =>
 
     <v-card-text class="bg-surface-light pt-4">
       {{ previewText }}
-      <template v-if="isTruncated">
-        <router-link :to="`/blogs/${props.slug}`" class="read-more-link">Read more</router-link>
-      </template>
     </v-card-text>
+
+    <v-card-actions>
+      <router-link :to="{ name: 'blog', params: { slug: props.slug }}" class="read-more-link">Read more</router-link>
+    </v-card-actions>
   </v-card>
 </template>
 
