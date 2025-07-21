@@ -10,7 +10,6 @@ const blogs = ref<Array<Blog>>([])
 
 async function load({done}: any) {
   blogsResponse.value = await getBlogs(blogsResponse.value?.next);
-  console.log(blogsResponse.value)
   if (blogsResponse.value == null) {
     done('error')
   } else if (!blogsResponse.value.results || blogsResponse.value.results.length === 0) {
@@ -27,36 +26,38 @@ async function load({done}: any) {
 </script>
 
 <template>
-  <v-container>
-    <v-row>
-      <v-col cols="4">
-        <v-infinite-scroll
-            :items="blogs"
-            @load="load"
-            mode="intersect"
+
+  <v-infinite-scroll
+      :items="blogs"
+      @load="load"
+      mode="intersect"
+  >
+    <v-container>
+      <v-row>
+        <v-col cols="4"
+               v-for="blog in blogs"
+               :key="blog.id"
         >
           <BlogCard
-              v-for="blog in blogs"
-              :key="blog.id"
               :title="blog.title"
               :slug="blog.slug"
               :body="blog.body"
               :author="blog.author"
               :profile_picture="blog.profile_picture"
           />
-          <template v-slot:loading>
-            <v-alert type="info">This is taking a very long time...</v-alert>
-          </template>
-          <template v-slot:error>
-            <v-alert type="error">Error occurred while fetching blogs</v-alert>
-          </template>
-          <template v-slot:empty>
-            <v-alert type="warning">No more items!</v-alert>
-          </template>
-        </v-infinite-scroll>
-      </v-col>
-    </v-row>
-  </v-container>
+        </v-col>
+      </v-row>
+    </v-container>
+    <template v-slot:loading>
+      <v-alert type="info">This is taking a very long time...</v-alert>
+    </template>
+    <template v-slot:error>
+      <v-alert type="error">Error occurred while fetching blogs</v-alert>
+    </template>
+
+
+  </v-infinite-scroll>
+
 </template>
 
 <style scoped>

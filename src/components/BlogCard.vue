@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from 'vue';
 
 const props = defineProps<{
   title: string,
@@ -7,6 +8,13 @@ const props = defineProps<{
   author: number,
   profile_picture: string,
 }>()
+
+const WORD_LIMIT = 150;
+const words = props.body.split(/\s+/);
+const isTruncated = computed(() => words.length > WORD_LIMIT);
+const previewText = computed(() =>
+  isTruncated.value ? words.slice(0, WORD_LIMIT).join(' ') : props.body
+);
 </script>
 
 <template>
@@ -14,21 +22,30 @@ const props = defineProps<{
   <v-card
       class="mx-auto"
       :subtitle="props.author"
-      rounded elevation="32"
+      rounded elevation="24"
       border
   >
     <template v-slot:title>
       <span class="font-weight-black">{{ props.title }}</span>
-    </template>
-    <template v-slot:subtitle>
       <span class="subtitle-flex">
-        <v-img class="profile_picture" :src="props.profile_picture" width="32" height="32" cover></v-img>
+        <template v-if="props.profile_picture">
+          <v-img class="profile_picture" :src="props.profile_picture" width="32" height="32" cover></v-img>
+        </template>
+        <template v-else>
+          <v-icon class="profile_picture" size="32">mdi-account-circle</v-icon>
+        </template>
         <span class="author-text">{{ props.author }}</span>
       </span>
     </template>
+    <template v-slot:subtitle>
+
+    </template>
 
     <v-card-text class="bg-surface-light pt-4">
-      {{ props.body }}
+      {{ previewText }}
+      <template v-if="isTruncated">
+        <router-link :to="`/blogs/${props.slug}`" class="read-more-link">Read more</router-link>
+      </template>
     </v-card-text>
   </v-card>
 </template>
@@ -55,5 +72,13 @@ const props = defineProps<{
 .author-text {
   display: inline-block;
   vertical-align: middle;
+  font-size: smaller;
+}
+.read-more-link {
+  color: #1976d2;
+  text-decoration: underline;
+  cursor: pointer;
+  margin-left: 4px;
+  font-weight: 500;
 }
 </style>
