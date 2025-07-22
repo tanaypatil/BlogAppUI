@@ -1,91 +1,130 @@
 <script setup lang="ts">
-import { Field, Form } from "vee-validate";
-import * as yup from "yup";
-import { useUserStore } from "../stores/userStore.ts";
-import { ref, type Ref } from "vue";
-import type { ISignupForm } from "../interfaces/ISignupForm.ts";
+import { Field, Form } from 'vee-validate'
+import * as yup from 'yup'
+import { useUserStore } from '../stores/userStore.ts'
+import { ref, type Ref } from 'vue'
+import type { ISignupForm } from '../interfaces/ISignupForm.ts'
 
 const schema: yup.ObjectSchema<{
-  username: string;
-  email: string;
-  profile_picture: File | null;
-  password: string;
+  username: string
+  email: string
+  profile_picture: File | null
+  password: string
 }> = yup.object({
-  username: yup.string().required("Username is required").min(3, "Username must be at least 3 characters"),
-  email: yup.string().required("Email is required").email("Email must be valid"),
-  profile_picture: yup.mixed<File>().nullable().notRequired().transform((value) => (value === undefined ? null : value)) as yup.Schema<File | null>,
-  password: yup.string().required("Password is required").min(6, "Password must be at least 6 characters"),
-});
+  username: yup
+    .string()
+    .required('Username is required')
+    .min(3, 'Username must be at least 3 characters'),
+  email: yup
+    .string()
+    .required('Email is required')
+    .email('Email must be valid'),
+  profile_picture: yup
+    .mixed<File>()
+    .nullable()
+    .notRequired()
+    .transform(value =>
+      value === undefined ? null : value
+    ) as yup.Schema<File | null>,
+  password: yup
+    .string()
+    .required('Password is required')
+    .min(6, 'Password must be at least 6 characters')
+})
 
-const userStore = useUserStore();
-const signup: (userdata: ISignupForm) => Promise<void> = userStore.signup;
+const userStore = useUserStore()
+const signup: (userdata: ISignupForm) => Promise<void> = userStore.signup
 
-const signupError: Ref<string> = ref('');
-const imagePreview: Ref<string | null> = ref(null);
+const signupError: Ref<string> = ref('')
+const imagePreview: Ref<string | null> = ref(null)
 
-const handleFileChange = (file: File | null, handleChange: (file: File | null) => void): void => {
+const handleFileChange = (
+  file: File | null,
+  handleChange: (file: File | null) => void
+): void => {
   if (file) {
-    const reader = new FileReader();
+    const reader = new FileReader()
     reader.onload = (e: ProgressEvent<FileReader>) => {
-      imagePreview.value = e.target?.result as string;
-    };
-    reader.readAsDataURL(file);
+      imagePreview.value = e.target?.result as string
+    }
+    reader.readAsDataURL(file)
   } else {
-    imagePreview.value = null;
+    imagePreview.value = null
   }
-  handleChange(file);
-};
+  handleChange(file)
+}
 
 const onSubmit = async (
   values: ISignupForm,
   { setFieldError }: { setFieldError: (field: string, message: string) => void }
 ): Promise<void> => {
   try {
-    await signup(values);
+    await signup(values)
   } catch (error: any) {
     if (error.response?.data) {
-      const errorData = error.response.data;
+      const errorData = error.response.data
 
       if (errorData.password) {
-        setFieldError('password', Array.isArray(errorData.password) ? errorData.password[0] : errorData.password);
+        setFieldError(
+          'password',
+          Array.isArray(errorData.password)
+            ? errorData.password[0]
+            : errorData.password
+        )
       }
       if (errorData.username) {
-        setFieldError('username', Array.isArray(errorData.username) ? errorData.username[0] : errorData.username);
+        setFieldError(
+          'username',
+          Array.isArray(errorData.username)
+            ? errorData.username[0]
+            : errorData.username
+        )
       }
       if (errorData.email) {
-        setFieldError('email', Array.isArray(errorData.email) ? errorData.email[0] : errorData.email);
+        setFieldError(
+          'email',
+          Array.isArray(errorData.email) ? errorData.email[0] : errorData.email
+        )
       }
       if (errorData.profile_picture) {
-        setFieldError('profile_picture', Array.isArray(errorData.profile_picture) ? errorData.profile_picture[0] : errorData.profile_picture);
+        setFieldError(
+          'profile_picture',
+          Array.isArray(errorData.profile_picture)
+            ? errorData.profile_picture[0]
+            : errorData.profile_picture
+        )
       }
 
       // Handle non-field errors
       if (errorData.non_field_errors) {
         signupError.value = Array.isArray(errorData.non_field_errors)
-            ? errorData.non_field_errors[0]
-            : errorData.non_field_errors;
+          ? errorData.non_field_errors[0]
+          : errorData.non_field_errors
       } else if (errorData.error || errorData.error_description) {
-        signupError.value = errorData.error_description || errorData.error;
+        signupError.value = errorData.error_description || errorData.error
       } else if (errorData.detail) {
-        signupError.value = errorData.detail;
+        signupError.value = errorData.detail
       } else {
-        signupError.value = 'Signup failed. Please check your credentials.';
+        signupError.value = 'Signup failed. Please check your credentials.'
       }
     } else {
-      signupError.value = error.message || 'Signup failed. Please try again.';
+      signupError.value = error.message || 'Signup failed. Please try again.'
     }
   }
-};
+}
 </script>
 
 <template>
-  <Form :validation-schema="schema" v-slot="{ meta, isSubmitting, handleSubmit }">
+  <Form
+    :validation-schema="schema"
+    v-slot="{ meta, isSubmitting, handleSubmit }"
+  >
     <v-alert
-        v-if="signupError"
-        type="error"
-        class="mb-4"
-        closable
-        @click:close="signupError = ''"
+      v-if="signupError"
+      type="error"
+      class="mb-4"
+      closable
+      @click:close="signupError = ''"
     >
       {{ signupError }}
     </v-alert>
@@ -93,17 +132,17 @@ const onSubmit = async (
       <div class="profile-picture-container">
         <div class="circular-upload" @click="$refs.fileInput.click()">
           <input
-              ref="fileInput"
-              type="file"
-              accept="image/*"
-              style="display: none"
-              @change="(e) => handleFileChange(e.target?.files[0], handleChange)"
+            ref="fileInput"
+            type="file"
+            accept="image/*"
+            style="display: none"
+            @change="e => handleFileChange(e.target?.files[0], handleChange)"
           />
           <div v-if="imagePreview" class="image-preview">
             <img
-                :src="imagePreview"
-                alt="Profile picture preview"
-                class="preview-image"
+              :src="imagePreview"
+              alt="Profile picture preview"
+              class="preview-image"
             />
           </div>
           <div v-else class="upload-placeholder">
@@ -159,8 +198,14 @@ const onSubmit = async (
         />
       </template>
     </Field>
-    <v-btn @click="handleSubmit(onSubmit as any)" type="submit" color="primary" block :disabled="!meta.valid || isSubmitting"
-           :class="{ 'submitting': isSubmitting }">Sign Up
+    <v-btn
+      @click="handleSubmit(onSubmit as any)"
+      type="submit"
+      color="primary"
+      block
+      :disabled="!meta.valid || isSubmitting"
+      :class="{ submitting: isSubmitting }"
+      >Sign Up
     </v-btn>
   </Form>
 </template>

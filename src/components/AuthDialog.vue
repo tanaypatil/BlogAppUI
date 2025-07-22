@@ -1,14 +1,15 @@
 <script setup lang="ts">
-
-import UserAuth from "./UserAuth.vue";
-
-
+import UserAuth from './UserAuth.vue'
 </script>
 
 <template>
   <v-dialog max-width="500">
     <template v-slot:activator="{ props: activatorProps }">
-      <v-btn icon="mdi-login" title="Login/Signup" v-bind="activatorProps"></v-btn>
+      <v-btn
+        icon="mdi-login"
+        title="Login/Signup"
+        v-bind="activatorProps"
+      ></v-btn>
     </template>
 
     <template v-slot:default>
@@ -17,6 +18,4 @@ import UserAuth from "./UserAuth.vue";
   </v-dialog>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

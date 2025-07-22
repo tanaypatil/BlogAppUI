@@ -1,35 +1,39 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed } from 'vue'
 
 const props = defineProps<{
-  title: string,
-  slug: string,
-  body: string,
-  author: number,
-  profile_picture: string,
+  title: string
+  slug: string
+  body: string
+  author: number
+  profile_picture: string
   tags: string[]
 }>()
 
-const WORD_LIMIT = 80;
-const words = props.body.split(/\s+/);
-const previewText = computed(() =>
-  words.slice(0, WORD_LIMIT).join(' ')
-);
+const WORD_LIMIT = 80
+const words = props.body.split(/\s+/)
+const previewText = computed(() => words.slice(0, WORD_LIMIT).join(' '))
 </script>
 
 <template>
-
   <v-card
-      class="mx-auto"
-      :subtitle="props.author"
-      rounded elevation="24"
-      border
+    class="mx-auto"
+    :subtitle="props.author"
+    rounded
+    elevation="24"
+    border
   >
     <template v-slot:title>
       <span class="font-weight-black">{{ props.title }}</span>
       <span class="subtitle-flex">
         <template v-if="props.profile_picture">
-          <v-img class="profile_picture" :src="props.profile_picture" width="32" height="32" cover></v-img>
+          <v-img
+            class="profile_picture"
+            :src="props.profile_picture"
+            width="32"
+            height="32"
+            cover
+          ></v-img>
         </template>
         <template v-else>
           <v-icon class="profile_picture" size="32">mdi-account-circle</v-icon>
@@ -50,7 +54,11 @@ const previewText = computed(() =>
     </v-card-text>
 
     <v-card-actions>
-      <router-link :to="{ name: 'blog', params: { slug: props.slug }}" class="read-more-link">Read more</router-link>
+      <router-link
+        :to="{ name: 'blog', params: { slug: props.slug } }"
+        class="read-more-link"
+        >Read more</router-link
+      >
     </v-card-actions>
   </v-card>
 </template>

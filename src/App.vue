@@ -1,14 +1,13 @@
 <script setup lang="ts">
-import {type Ref, ref} from "vue";
-import AppBar from "./components/AppBar.vue";
-import AddFab from "./components/AddFab.vue";
+import { type Ref, ref } from 'vue'
+import AppBar from './components/AppBar.vue'
+import AddFab from './components/AddFab.vue'
 
 const theme: Ref<string> = ref('light')
 </script>
 
 <template>
   <v-app :theme="theme">
-
     <AppBar v-model:theme="theme" />
 
     <v-main>
@@ -22,5 +21,4 @@ const theme: Ref<string> = ref('light')
   </v-app>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>
