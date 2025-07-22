@@ -26,6 +26,8 @@ export default {
       document: 'readonly',
       localStorage: 'readonly',
       sessionStorage: 'readonly',
+      FormData: 'readonly',
+      Element: 'readonly',
       navigator: 'readonly',
       fetch: 'readonly',
       setTimeout: 'readonly',
