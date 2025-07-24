@@ -2,7 +2,7 @@
 import { shallowRef, watch } from 'vue'
 
 const open = shallowRef(false)
-const fabPosition = shallowRef('absolute')
+const fabPosition = shallowRef('fixed')
 const menuLocation = shallowRef('left center')
 const fabLocation = shallowRef('right bottom')
 const transition = shallowRef('slide-y-reverse-transition')

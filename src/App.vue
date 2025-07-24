@@ -2,8 +2,12 @@
 import { type Ref, ref } from 'vue'
 import AppBar from './components/AppBar.vue'
 import AddFab from './components/AddFab.vue'
+import { useUserStore } from './stores/userStore.ts'
 
 const theme: Ref<string> = ref('light')
+
+const userStore = useUserStore()
+const { userLoggedIn } = userStore
 </script>
 
 <template>
@@ -16,7 +20,7 @@ const theme: Ref<string> = ref('light')
           <component :is="Component"></component>
         </router-view>
       </transition>
-      <AddFab />
+      <AddFab v-if="userLoggedIn" />
     </v-main>
   </v-app>
 </template>
