@@ -2,6 +2,8 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import { useUserStore } from '../stores/userStore.ts'
 import BlogView from '../views/BlogView.vue'
+import { useAuthDialogStore } from '../stores/authDialogStore.ts'
+import { storeToRefs } from 'pinia'
 
 const routes = [
   {
@@ -39,6 +41,9 @@ router.beforeEach((to, from, next) => {
   if (userStore.userLoggedIn) {
     next()
   } else {
+    const authDialogStore = useAuthDialogStore()
+    const { isDialogOpen} = storeToRefs(authDialogStore)
+    isDialogOpen.value = true
     next({ name: 'home' })
   }
 })
