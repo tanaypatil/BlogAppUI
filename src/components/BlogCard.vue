@@ -5,8 +5,8 @@ const props = defineProps<{
   title: string
   slug: string
   body: string
-  author: number
-  profile_picture: string
+  author: string
+  profile_picture: string | null
   tags: string[]
 }>()
 

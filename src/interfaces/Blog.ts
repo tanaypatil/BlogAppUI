@@ -3,10 +3,10 @@ export interface Blog {
   title: string
   body: string
   slug: string
-  author: number
+  author: string
   category: string
   tags: string[]
   created: string
   updated: string
-  profile_picture: string
+  profile_picture: string | null
 }
