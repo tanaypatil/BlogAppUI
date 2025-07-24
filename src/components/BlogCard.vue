@@ -7,7 +7,8 @@ const props = defineProps<{
   body: string
   author: string
   profile_picture: string | null
-  tags: string[]
+  tags: string[],
+  category: string
 }>()
 
 const WORD_LIMIT = 80
@@ -24,41 +25,52 @@ const previewText = computed(() => words.slice(0, WORD_LIMIT).join(' '))
     border
   >
     <template v-slot:title>
-      <span class="font-weight-black">{{ props.title }}</span>
-      <span class="subtitle-flex">
-        <template v-if="props.profile_picture">
-          <v-img
-            class="profile_picture"
-            :src="props.profile_picture"
-            width="32"
-            height="32"
-            cover
-          ></v-img>
-        </template>
-        <template v-else>
-          <v-icon class="profile_picture" size="32">mdi-account-circle</v-icon>
-        </template>
-        <span class="author-text">{{ props.author }}</span>
-      </span>
+      {{ props.title }}
+      <v-divider class="mb-4"></v-divider>
     </template>
+    <v-divider class="mb-4"></v-divider>
     <template v-slot:subtitle>
-      <div class="bg-amber mt-1 rounded">
-        <v-chip class="ma-2" variant="elevated" v-for="tag in props.tags">
-          {{ tag }}
-        </v-chip>
-      </div>
+      <template v-if="props.profile_picture">
+        <v-img
+          class="profile_picture"
+          :src="props.profile_picture"
+          width="32"
+          height="32"
+          cover
+        ></v-img>
+      </template>
+      <template v-else>
+        <v-icon class="profile_picture" size="32">mdi-account-circle</v-icon>
+      </template>
+      <span class="author-text">{{ props.author }}</span> | <span class="author-text">{{ props.category }}</span>
     </template>
 
     <v-card-text class="bg-surface-light pt-4">
       {{ previewText }}
     </v-card-text>
-
     <v-card-actions>
-      <router-link
-        :to="{ name: 'blog', params: { slug: props.slug } }"
-        class="read-more-link"
-        >Read more</router-link
-      >
+      <div>
+        <router-link
+          :to="{ name: 'blog', params: { slug: props.slug } }"
+          class="read-more-link text-button"
+        >Read more
+        </router-link
+        >
+      </div>
+      <v-spacer></v-spacer>
+      <v-sheet class="pa-2">
+        <v-chip-group
+          selected-class="text-primary"
+          column
+        >
+          <v-chip
+            v-for="tag in props.tags"
+            :key="tag" class="bg-blue-grey-darken-1"
+          >
+            {{ tag }}
+          </v-chip>
+        </v-chip-group>
+      </v-sheet>
     </v-card-actions>
   </v-card>
 </template>
@@ -87,6 +99,7 @@ const previewText = computed(() => words.slice(0, WORD_LIMIT).join(' '))
   vertical-align: middle;
   font-size: smaller;
 }
+
 .read-more-link {
   color: #1976d2;
   text-decoration: underline;

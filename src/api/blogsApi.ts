@@ -17,4 +17,9 @@ async function fetchBlogs(
   }
 }
 
-export { fetchBlogs }
+async function fetchBlog(slug: string) {
+  const response = await api.get('/blogs/' + slug)
+  return response.data
+}
+
+export { fetchBlogs, fetchBlog }

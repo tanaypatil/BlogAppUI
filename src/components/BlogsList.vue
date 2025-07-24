@@ -41,6 +41,7 @@ async function load({ done }: any) {
             :author="blog.author"
             :profile_picture="blog.profile_picture"
             :tags="blog.tags"
+            :category="blog.category"
           />
         </v-col>
       </v-row>
