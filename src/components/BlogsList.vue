@@ -1,11 +1,28 @@
 <script setup lang="ts">
 import BlogCard from './BlogCard.vue'
-import { useBlogStore } from '../stores/blogStore.ts'
-import { storeToRefs } from 'pinia'
+import { fetchBlogs } from '../api/blogsApi.ts'
+import { ref } from 'vue'
+import type { Blog } from '../interfaces/Blog.ts'
+import type { BlogResponse } from '../interfaces/BlogResponse.ts'
 
-const blogStore = useBlogStore()
-const { blogs } = storeToRefs(blogStore)
-const { getBlogs } = blogStore
+const blogs = ref<Array<Blog>>([])
+const blogsResponse = ref<BlogResponse | null>()
+
+const getBlogs = async (): Promise<string> => {
+  blogsResponse.value = await fetchBlogs(blogsResponse.value?.next)
+  if (blogsResponse.value) {
+    if (blogsResponse.value?.results) {
+      blogs.value.push(...blogsResponse.value.results)
+    }
+    if (!blogsResponse.value.next) {
+      return 'empty'
+    } else {
+      return 'ok'
+    }
+  } else {
+    return 'error'
+  }
+}
 
 async function load({ done }: any) {
   done(await getBlogs())
