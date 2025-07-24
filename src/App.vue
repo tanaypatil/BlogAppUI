@@ -12,9 +12,7 @@ const theme: Ref<string> = ref('light')
 
     <v-main>
       <router-view v-slot="{ Component }">
-        <transition name="fade" mode="out-in">
-          <component :is="Component"></component>
-        </transition>
+        <component :is="Component"></component>
       </router-view>
       <AddFab />
     </v-main>
