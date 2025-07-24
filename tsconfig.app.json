@@ -11,7 +11,7 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
     "lib": ["dom", "es2022"],
-    "types": ["vuetify"]
+    "types": ["vuetify", "vite/client"]
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue"]
 }
