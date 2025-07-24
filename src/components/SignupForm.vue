@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Field, Form } from 'vee-validate'
+import { Field, Form, type GenericObject } from 'vee-validate'
 import * as yup from 'yup'
 import { useUserStore } from '../stores/userStore.ts'
 import { ref, type Ref } from 'vue'
@@ -33,36 +33,47 @@ const schema: yup.ObjectSchema<{
 })
 
 const userStore = useUserStore()
-const signup: (userdata: ISignupForm) => Promise<void> = userStore.signup
 
-const signupError: Ref<string> = ref('')
+const signupError: Ref<string | string[]> = ref('')
 const imagePreview: Ref<string | null> = ref(null)
 
 const handleFileChange = (
-  file: File | null,
-  handleChange: (file: File | null) => void
+  selectedFile: File | null,
+  handleChange: any
 ): void => {
-  if (file) {
+  if (selectedFile) {
     const reader = new FileReader()
     reader.onload = (e: ProgressEvent<FileReader>) => {
       imagePreview.value = e.target?.result as string
     }
-    reader.readAsDataURL(file)
+    reader.readAsDataURL(selectedFile)
   } else {
     imagePreview.value = null
   }
-  handleChange(file)
+  handleChange(selectedFile)
 }
 
 const onSubmit = async (
-  values: ISignupForm,
-  { setFieldError }: { setFieldError: (field: string, message: string) => void }
+  values: GenericObject,
+  actions: {
+    setFieldError: any
+  }
 ): Promise<void> => {
+  const typedValues = values as ISignupForm
+  const { setFieldError } = actions
+
   try {
-    await signup(values)
-  } catch (error: any) {
-    if (error.response?.data) {
-      const errorData = error.response.data
+    await userStore.signup(typedValues)
+  } catch (error: unknown) {
+    const errorResponse = error as {
+      response?: {
+        data?: Record<string, string | string[]>
+      }
+      message?: string
+    }
+
+    if (errorResponse.response?.data) {
+      const errorData = errorResponse.response.data
 
       if (errorData.password) {
         setFieldError(
@@ -108,7 +119,8 @@ const onSubmit = async (
         signupError.value = 'Signup failed. Please check your credentials.'
       }
     } else {
-      signupError.value = error.message || 'Signup failed. Please try again.'
+      signupError.value =
+        errorResponse.message || 'Signup failed. Please try again.'
     }
   }
 }
@@ -130,13 +142,22 @@ const onSubmit = async (
     </v-alert>
     <Field name="profile_picture" v-slot="{ errors, handleChange }">
       <div class="profile-picture-container">
-        <div class="circular-upload" @click="$refs.fileInput.click()">
+        <div
+          class="circular-upload"
+          @click="($refs.fileInput as HTMLInputElement).click()"
+        >
           <input
             ref="fileInput"
             type="file"
             accept="image/*"
             style="display: none"
-            @change="e => handleFileChange(e.target?.files[0], handleChange)"
+            @change="
+              e =>
+                handleFileChange(
+                  (e.target as HTMLInputElement)?.files?.[0] || null,
+                  handleChange
+                )
+            "
           />
           <div v-if="imagePreview" class="image-preview">
             <img
