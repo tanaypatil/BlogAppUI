@@ -53,9 +53,9 @@ const previewText = computed(() => words.slice(0, WORD_LIMIT).join(' '))
         <router-link
           :to="{ name: 'blog', params: { slug: props.slug } }"
           class="read-more-link text-button"
-        >Read more
-        </router-link
         >
+          <v-btn variant="tonal">Read more</v-btn>
+        </router-link>
       </div>
       <v-spacer></v-spacer>
       <v-sheet class="pa-2">
