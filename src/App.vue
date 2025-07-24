@@ -11,9 +11,11 @@ const theme: Ref<string> = ref('light')
     <AppBar v-model:theme="theme" />
 
     <v-main>
-      <router-view v-slot="{ Component }">
-        <component :is="Component"></component>
-      </router-view>
+      <transition name="fade" mode="out-in">
+        <router-view v-slot="{ Component }">
+          <component :is="Component"></component>
+        </router-view>
+      </transition>
       <AddFab />
     </v-main>
   </v-app>
