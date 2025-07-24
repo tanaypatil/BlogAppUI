@@ -12,7 +12,10 @@ const routes = [
   {
     path: '/blog/:slug',
     name: 'blog',
-    component: BlogView
+    component: BlogView,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/:catchall(.*)*',
