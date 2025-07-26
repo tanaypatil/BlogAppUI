@@ -54,7 +54,7 @@ const previewText = computed(() => words.slice(0, WORD_LIMIT).join(' '))
           :to="{ name: 'blog', params: { slug: props.slug } }"
           class="read-more-link text-button"
         >
-          <v-btn variant="tonal">Read more</v-btn>
+          <v-btn variant="tonal" color="blue-grey-darken-1">Read more</v-btn>
         </router-link>
       </div>
       <v-spacer></v-spacer>

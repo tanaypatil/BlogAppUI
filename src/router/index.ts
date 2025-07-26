@@ -4,6 +4,7 @@ import { useUserStore } from '../stores/userStore.ts'
 import BlogView from '../views/BlogView.vue'
 import { useAuthDialogStore } from '../stores/authDialogStore.ts'
 import { storeToRefs } from 'pinia'
+import BlogEditor from '../views/BlogEditor.vue'
 
 const routes = [
   {
@@ -15,6 +16,14 @@ const routes = [
     path: '/blog/:slug',
     name: 'blog',
     component: BlogView,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/blog/create/',
+    name: 'blogCreate',
+    component: BlogEditor,
     meta: {
       requiresAuth: true
     }

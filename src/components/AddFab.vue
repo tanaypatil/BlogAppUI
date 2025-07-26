@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { shallowRef, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
 const open = shallowRef(false)
 const fabPosition = shallowRef('fixed')
@@ -16,6 +17,12 @@ function reopen() {
   open.value = false
   setTimeout(() => (open.value = true), 400)
 }
+
+const router = useRouter()
+
+const createBlog = () => {
+  router.push('/blog/create')
+}
 </script>
 
 <template>
@@ -29,25 +36,25 @@ function reopen() {
     icon
     class="pa-4"
   >
-    <v-icon>mdi-plus</v-icon>
-    <!--    <v-icon>{{ open ? 'mdi-close' : 'mdi-crown' }}</v-icon>-->
-    <!--    <v-speed-dial v-model="open" :location="menuLocation" :transition="transition" activator="parent">-->
-    <!--      <v-btn key="1" color="success" icon>-->
-    <!--        <v-icon size="24">$success</v-icon>-->
-    <!--      </v-btn>-->
+    <!--    <v-icon>mdi-plus</v-icon>-->
+    <v-icon>{{ open ? 'mdi-close' : 'mdi-plus' }}</v-icon>
+    <v-speed-dial v-model="open" :location="menuLocation" :transition="transition" activator="parent">
+      <v-btn key="1" title="Create Blog" color="success" icon @click="createBlog">
+        <v-icon size="24">mdi-plus</v-icon>
+      </v-btn>
 
-    <!--      <v-btn key="2" color="info" icon>-->
-    <!--        <v-icon size="24">$info</v-icon>-->
-    <!--      </v-btn>-->
+      <v-btn title="Edit Blog" key="2" color="info" icon @click="createBlog">
+        <v-icon size="24">mdi-pencil</v-icon>
+      </v-btn>
 
-    <!--      <v-btn key="3" color="warning" icon>-->
-    <!--        <v-icon size="24">$warning</v-icon>-->
-    <!--      </v-btn>-->
+<!--      <v-btn key="3" color="warning" icon>-->
+<!--        <v-icon size="24">$warning</v-icon>-->
+<!--      </v-btn>-->
 
-    <!--      <v-btn key="4" color="error" icon>-->
-    <!--        <v-icon size="24">$error</v-icon>-->
-    <!--      </v-btn>-->
-    <!--    </v-speed-dial>-->
+<!--      <v-btn key="4" color="error" icon>-->
+<!--        <v-icon size="24">$error</v-icon>-->
+<!--      </v-btn>-->
+    </v-speed-dial>
   </v-fab>
 </template>
 

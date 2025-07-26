@@ -39,7 +39,7 @@ onMounted(async () => {
       </v-col>
       <v-col cols="8">
         <v-card class="pa-3" elevation="8" rounded>
-          <div>
+          <div class="bg-blue-grey-lighten-5">
             <h1 class="font-weight-black">{{ blog?.title }}</h1>
           </div>
 
