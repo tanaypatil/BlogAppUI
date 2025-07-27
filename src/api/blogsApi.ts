@@ -1,5 +1,6 @@
 import { api } from '../api.ts'
 import type { BlogResponse } from '../interfaces/BlogResponse.ts'
+import type { IBlogForm } from '../interfaces/IBlogForm.ts'
 
 async function fetchBlogs(
   pageUrl: string | null | undefined
@@ -22,4 +23,16 @@ async function fetchBlog(slug: string) {
   return response.data
 }
 
-export { fetchBlogs, fetchBlog }
+async function createBlog(formValues: IBlogForm) {
+  console.log(formValues)
+  const formData = new FormData()
+  formData.append('title', formValues.title)
+  formData.append('body', formValues.body)
+  formData.append('category', formValues.category)
+  formValues.tags.forEach(tag => {
+    formData.append('tag_names', tag)
+  })
+  return await api.post('/blogs/', formData)
+}
+
+export { fetchBlogs, fetchBlog, createBlog }

@@ -2,19 +2,105 @@
 
 import { Field, Form } from 'vee-validate'
 import * as yup from 'yup'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
+import type { IBlogForm } from '../interfaces/IBlogForm.ts'
+import { createBlog } from '../api/blogsApi.ts'
+import { getTags } from '../api/tagsApi.ts'
+import { fetchCategories } from '../api/categoriesApi.ts'
+import type { Blog } from '../interfaces/Blog.ts'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const schema = yup.object({
   title: yup.string().required('Title is required'),
   body: yup.string().required('Body is required'),
   category: yup.string().required('Category is required'),
-  tags: yup.string().required('Tags are required')
+  tags: yup.array().of(yup.string()).required('At least one tag is required')
+})
+
+const tags = ref<string[]>([])
+const categories = ref<string[]>([])
+
+const getTagsList = async () => {
+  const tagsJson = await getTags()
+  for (const tag of tagsJson) {
+    tags.value.push(tag['name'])
+  }
+}
+
+const getCategories = async () => {
+  categories.value = await fetchCategories()
+}
+
+onMounted(async () => {
+  await getTagsList()
+  await getCategories()
 })
 
 const submitError = ref<string>('')
 
-const onSubmit = () => {
-  console.log('Form Submitted')
+const onSubmit = async (values: IBlogForm, { setFieldError }: any) => {
+  try {
+    const response = await createBlog(values)
+    console.log(response.data)
+    const blog = response.data as Blog
+    await router.push({ name: 'blog', params: { 'slug': blog.slug } })
+  } catch (error: any) {
+    if (error.response?.data) {
+      const errorData = error.response.data
+
+      if (errorData.title) {
+        setFieldError(
+          'title',
+          Array.isArray(errorData.title)
+            ? errorData.title[0]
+            : errorData.title
+        )
+      }
+      if (errorData.body) {
+        setFieldError(
+          'body',
+          Array.isArray(errorData.body)
+            ? errorData.body[0]
+            : errorData.body
+        )
+      }
+
+      if (errorData.category) {
+        setFieldError(
+          'category',
+          Array.isArray(errorData.category)
+            ? errorData.category[0]
+            : errorData.category
+        )
+      }
+
+      if (errorData.tags) {
+        setFieldError(
+          'tags',
+          Array.isArray(errorData.tags)
+            ? errorData.tags[0]
+            : errorData.tags
+        )
+      }
+
+      // Handle non-field errors
+      if (errorData.non_field_errors) {
+        submitError.value = Array.isArray(errorData.non_field_errors)
+          ? errorData.non_field_errors[0]
+          : errorData.non_field_errors
+      } else if (errorData.error || errorData.error_description) {
+        submitError.value = errorData.error_description || errorData.error
+      } else if (errorData.detail) {
+        submitError.value = errorData.detail
+      } else {
+        submitError.value = 'Error creating blog.'
+      }
+    } else {
+      submitError.value = error.message || 'Login failed. Please try again.'
+    }
+  }
 }
 </script>
 
@@ -81,7 +167,7 @@ const onSubmit = () => {
                   required
                   clearable
                   label="Category"
-                  :items="['California', 'Colorado', 'Florida', 'Georgia', 'Texas', 'Wyoming']"
+                  :items="categories"
                   variant="outlined"
                 ></v-select>
               </template>
@@ -99,7 +185,7 @@ const onSubmit = () => {
                   chips
                   multiple
                   label="Tags"
-                  :items="['California', 'Colorado', 'Florida', 'Georgia', 'Texas', 'Wyoming']"
+                  :items="tags"
                   variant="outlined"
                 ></v-combobox>
               </template>
