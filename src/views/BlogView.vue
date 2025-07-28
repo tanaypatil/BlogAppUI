@@ -1,19 +1,54 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { fetchBlog } from '../api/blogsApi.ts'
-import { useRoute } from 'vue-router'
+import { deleteBlog, fetchBlog } from '../api/blogsApi.ts'
+import { useRoute, useRouter } from 'vue-router'
 import type { Blog } from '../interfaces/Blog.ts'
+import { useUserStore } from '../stores/userStore.ts'
 
 const route = useRoute()
-
+const router = useRouter()
 const blog = ref<Blog>()
+const isOwner = ref<boolean>(false)
 onMounted(async () => {
   blog.value = await fetchBlog(route.params.slug)
+  const userStore = useUserStore()
+  const { username } = userStore
+  console.log(username, blog.value?.author)
+  isOwner.value = username == blog.value?.author
 })
+
+const deleteDialog = ref(false)
+
+const showAlert = ref<boolean>(false)
+const alertMessage = ref<string>('')
+const alertType = ref<string>('')
+
+const onConfirmDelete = async () => {
+  try {
+    showAlert.value = false
+    await deleteBlog(route.params.slug)
+    await router.push({ name: 'home' })
+  } catch (e) {
+    console.error(e)
+    alertMessage.value = e.message
+    alertType.value = 'error'
+    showAlert.value = true
+  }
+}
 </script>
 
 <template>
   <v-container>
+    <v-row v-show="showAlert">
+      <v-alert
+        :type="alertType=='error' ? 'error' : 'success'"
+        class="mb-4"
+        closable
+        @click:close="showAlert = false"
+      >
+        {{ alertMessage }}
+      </v-alert>
+    </v-row>
     <v-row>
       <v-col cols="2">
         <v-sheet
@@ -35,6 +70,39 @@ onMounted(async () => {
           <div class="text-center">
             {{ blog?.author }}
           </div>
+        </v-sheet>
+        <v-sheet
+          class="pa-3 bg-blue-grey-lighten-3 text-center"
+          v-if="isOwner"
+        >
+          <v-dialog
+            v-model="deleteDialog"
+            max-width="400"
+            persistent
+          >
+            <template v-slot:activator="{ props: activatorProps }">
+              <v-btn icon="mdi-delete" icon-size="large" v-bind="activatorProps"></v-btn>
+            </template>
+
+            <v-card>
+              <template v-slot:text>
+                Are you sure you want to delete this blog?
+              </template>
+              <template v-slot:actions>
+                <v-spacer></v-spacer>
+
+                <v-btn @click="onConfirmDelete">
+                  Yes, delete it
+                </v-btn>
+
+                <v-btn @click="deleteDialog = false">
+                  Cancel
+                </v-btn>
+              </template>
+            </v-card>
+          </v-dialog>
+          <v-divider class="border-opacity-100 ml-1 mr-1" color="white" vertical></v-divider>
+          <v-btn icon="mdi-pencil" icon-size="large"></v-btn>
         </v-sheet>
       </v-col>
       <v-col cols="8">

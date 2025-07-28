@@ -35,4 +35,8 @@ async function createBlog(formValues: IBlogForm) {
   return await api.post('/blogs/', formData)
 }
 
-export { fetchBlogs, fetchBlog, createBlog }
+async function deleteBlog(slug: string) {
+  return await api.delete(`/blogs/${slug}/`)
+}
+
+export { fetchBlogs, fetchBlog, createBlog, deleteBlog }

@@ -10,6 +10,8 @@ export const useUserStore = defineStore('userStore', () => {
 
   const userLoggedIn = computed(() => !!localStorage.getItem('accessToken'))
 
+  const username = ref<string | null>(localStorage.getItem('username'))
+
   async function signup(userdata: ISignupForm): Promise<void> {
     try {
       const formData = new FormData()
@@ -54,8 +56,10 @@ export const useUserStore = defineStore('userStore', () => {
       )
       accessToken.value = response.data.access_token
       refreshToken.value = response.data.refresh_token
+      username.value = loginForm.username
       localStorage.setItem('accessToken', accessToken.value ?? '')
       localStorage.setItem('refreshToken', refreshToken.value ?? '')
+      localStorage.setItem('username', username.value ?? '')
       window.location.reload()
     } catch (error) {
       accessToken.value = null
@@ -95,6 +99,7 @@ export const useUserStore = defineStore('userStore', () => {
     refreshToken.value = null
     localStorage.removeItem('accessToken')
     localStorage.removeItem('refreshToken')
+    localStorage.removeItem('username')
     window.location.reload()
   }
 
@@ -125,5 +130,5 @@ export const useUserStore = defineStore('userStore', () => {
     }
   )
 
-  return { userLoggedIn, signup, login, logout }
+  return { userLoggedIn, username, signup, login, logout }
 })
