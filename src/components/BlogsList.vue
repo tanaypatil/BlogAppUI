@@ -37,7 +37,7 @@ async function load({ done }: any) {
           <BlogCard
             :title="blog.title"
             :slug="blog.slug"
-            :body="blog.body"
+            :body="blog.preview_body"
             :author="blog.author"
             :profile_picture="blog.profile_picture"
             :tags="blog.tags"

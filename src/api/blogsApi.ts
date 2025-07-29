@@ -6,7 +6,7 @@ async function fetchBlogs(
   pageUrl: string | null | undefined
 ): Promise<BlogResponse | null> {
   try {
-    const response = await api.get(pageUrl ?? '/blogs/?page=1')
+    const response = await api.get(pageUrl ?? '/blogs/preview/?page=1')
     if (response.status === 200) {
       return response.data as BlogResponse
     }

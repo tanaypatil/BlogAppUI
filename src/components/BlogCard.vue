@@ -10,10 +10,6 @@ const props = defineProps<{
   tags: string[],
   category: string
 }>()
-
-const WORD_LIMIT = 80
-const words = props.body.split(/\s+/)
-const previewText = computed(() => words.slice(0, WORD_LIMIT).join(' '))
 </script>
 
 <template>
@@ -46,7 +42,7 @@ const previewText = computed(() => words.slice(0, WORD_LIMIT).join(' '))
     </template>
 
     <v-card-text class="bg-surface-light pt-4">
-      {{ previewText }}
+      {{ props.body }}
     </v-card-text>
     <v-card-actions>
       <div>

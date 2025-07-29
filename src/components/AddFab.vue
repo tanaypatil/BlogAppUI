@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { shallowRef, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 
 const open = shallowRef(false)
 const fabPosition = shallowRef('fixed')
@@ -46,14 +46,6 @@ const createBlog = () => {
       <v-btn title="Edit Blog" key="2" color="info" icon @click="createBlog">
         <v-icon size="24">mdi-pencil</v-icon>
       </v-btn>
-
-<!--      <v-btn key="3" color="warning" icon>-->
-<!--        <v-icon size="24">$warning</v-icon>-->
-<!--      </v-btn>-->
-
-<!--      <v-btn key="4" color="error" icon>-->
-<!--        <v-icon size="24">$error</v-icon>-->
-<!--      </v-btn>-->
     </v-speed-dial>
   </v-fab>
 </template>
