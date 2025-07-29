@@ -5,6 +5,7 @@ import BlogView from '../views/BlogView.vue'
 import { useAuthDialogStore } from '../stores/authDialogStore.ts'
 import { storeToRefs } from 'pinia'
 import BlogEditor from '../views/BlogEditor.vue'
+import { fetchBlog } from '../api/blogsApi.ts'
 
 const routes = [
   {
@@ -33,7 +34,8 @@ const routes = [
     name: 'blogEdit',
     component: BlogEditor,
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      requiresOwner: true
     }
   },
   {
@@ -48,15 +50,23 @@ const router = createRouter({
   linkExactActiveClass: 'text-yellow-500'
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   if (!to.meta.requiresAuth) {
     next()
     return
   }
   const userStore = useUserStore()
-
   if (userStore.userLoggedIn) {
-    next()
+    if (to.meta.requiresOwner) {
+      const blog = await fetchBlog(to.params.slug)
+      if (blog.author === userStore.username) {
+        next()
+      } else {
+        next({ name: 'home' })
+      }
+    } else {
+      next()
+    }
   } else {
     const authDialogStore = useAuthDialogStore()
     const { isDialogOpen} = storeToRefs(authDialogStore)
