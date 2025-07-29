@@ -4,6 +4,8 @@ import { deleteBlog, fetchBlog } from '../api/blogsApi.ts'
 import { useRoute, useRouter } from 'vue-router'
 import type { Blog } from '../interfaces/Blog.ts'
 import { useUserStore } from '../stores/userStore.ts'
+import CommentAdd from '../components/CommentAdd.vue'
+import CommentCard from '../components/CommentCard.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -34,6 +36,11 @@ const onConfirmDelete = async () => {
     showAlert.value = true
   }
 }
+
+function onPostComment(comment) {
+  // handle post
+  console.log(comment)
+}
 </script>
 
 <template>
@@ -51,12 +58,12 @@ const onConfirmDelete = async () => {
     <v-row>
       <v-col cols="2">
         <v-sheet class="mx-auto" elevation="10">
-          <v-sheet class="pa-3 bg-blue-grey-darken-4"> Author </v-sheet>
+          <v-sheet class="pa-3 bg-blue-grey-darken-4"> Author</v-sheet>
           <v-img v-if="blog?.profile_picture" :src="blog.profile_picture" cover>
           </v-img>
           <v-icon v-else class="profile_picture" size="32"
-            >mdi-account-circle</v-icon
-          >
+          >mdi-account-circle
+          </v-icon>
           <div class="text-center">
             {{ blog?.author }}
           </div>
@@ -78,9 +85,9 @@ const onConfirmDelete = async () => {
               <template v-slot:actions>
                 <v-spacer></v-spacer>
 
-                <v-btn @click="onConfirmDelete"> Yes, delete it </v-btn>
+                <v-btn @click="onConfirmDelete"> Yes, delete it</v-btn>
 
-                <v-btn @click="deleteDialog = false"> Cancel </v-btn>
+                <v-btn @click="deleteDialog = false"> Cancel</v-btn>
               </template>
             </v-card>
           </v-dialog>
@@ -92,8 +99,9 @@ const onConfirmDelete = async () => {
           <router-link
             style="text-decoration: none; color: inherit"
             :to="{ name: 'blogEdit', params: { slug: blog?.slug } }"
-            ><v-btn icon="mdi-pencil" icon-size="large"></v-btn
-          ></router-link>
+          >
+            <v-btn icon="mdi-pencil" icon-size="large"></v-btn>
+          </router-link>
         </v-sheet>
       </v-col>
       <v-col cols="8">
@@ -109,13 +117,13 @@ const onConfirmDelete = async () => {
       </v-col>
       <v-col cols="2">
         <v-sheet class="mx-auto" elevation="10">
-          <v-sheet class="pa-3 bg-blue-grey-darken-4"> Category </v-sheet>
+          <v-sheet class="pa-3 bg-blue-grey-darken-4"> Category</v-sheet>
           <div class="pa-4">
             {{ blog?.category }}
           </div>
         </v-sheet>
         <v-sheet class="mx-auto" elevation="10">
-          <v-sheet class="pa-3 bg-blue-grey-darken-4"> Tags </v-sheet>
+          <v-sheet class="pa-3 bg-blue-grey-darken-4"> Tags</v-sheet>
 
           <div class="pa-4">
             <v-chip-group selected-class="text-primary" column>
@@ -131,6 +139,55 @@ const onConfirmDelete = async () => {
         </v-sheet>
       </v-col>
     </v-row>
+    <v-row>
+      <v-col cols="8" offset="2">
+        <v-expansion-panels>
+          <v-expansion-panel>
+            <template v-slot:title>
+              Comments:
+              <v-spacer></v-spacer>
+              <v-sheet class="align-center text-center">
+                <v-bottom-sheet
+                  inset
+                  persistent
+                  rounded
+                  :scrim="false"
+                  class="bottom-sheet-fixed"
+                >
+                  <template v-slot:activator="{ props: activatorProps }">
+                    <v-btn v-bind="activatorProps" text="Add a Comment"></v-btn>
+                  </template>
+                  <v-sheet style="background-color: transparent; box-shadow: none" elevation="0">
+                    <CommentAdd @post="onPostComment" />
+                  </v-sheet>
+                </v-bottom-sheet>
+              </v-sheet>
+            </template>
+            <template v-slot:text>
+              <CommentCard />
+            </template>
+          </v-expansion-panel>
+        </v-expansion-panels>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
-<style scoped></style>
+<style>
+.bottom-sheet-fixed {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  pointer-events: none;
+  box-shadow: none !important; /* pass pointer events only to content inside */
+}
+
+.bottom-sheet-fixed > .v-bottom-sheet__content {
+  pointer-events: auto;
+}
+
+.v-bottom-sheet > .v-bottom-sheet__content.v-overlay__content {
+  box-shadow: none !important;
+}
+</style>
