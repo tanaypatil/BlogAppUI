@@ -62,7 +62,7 @@ function onPostComment(comment) {
           <v-img v-if="blog?.profile_picture" :src="blog.profile_picture" cover>
           </v-img>
           <v-icon v-else class="profile_picture" size="32"
-          >mdi-account-circle
+            >mdi-account-circle
           </v-icon>
           <div class="text-center">
             {{ blog?.author }}
@@ -157,7 +157,10 @@ function onPostComment(comment) {
                   <template v-slot:activator="{ props: activatorProps }">
                     <v-btn v-bind="activatorProps" text="Add a Comment"></v-btn>
                   </template>
-                  <v-sheet style="background-color: transparent; box-shadow: none" elevation="0">
+                  <v-sheet
+                    style="background-color: transparent; box-shadow: none"
+                    elevation="0"
+                  >
                     <CommentAdd @post="onPostComment" />
                   </v-sheet>
                 </v-bottom-sheet>

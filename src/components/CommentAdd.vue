@@ -29,7 +29,12 @@ function emitPost() {
     </v-col>
     <v-col cols="1">
       <div class="pa-2 rounded">
-        <v-btn color="primary" icon :disabled="!comment.trim()" @click="emitPost">
+        <v-btn
+          color="primary"
+          icon
+          :disabled="!comment.trim()"
+          @click="emitPost"
+        >
           <v-icon>mdi-send</v-icon>
         </v-btn>
       </div>
