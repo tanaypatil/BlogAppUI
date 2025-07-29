@@ -1,8 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-
-export const useAuthDialogStore = defineStore("authDialogStore", () => {
+export const useAuthDialogStore = defineStore('authDialogStore', () => {
   const isDialogOpen = ref<boolean>(false)
 
   const openDialog = () => {
@@ -13,5 +12,5 @@ export const useAuthDialogStore = defineStore("authDialogStore", () => {
     isDialogOpen.value = false
   }
 
-  return  { isDialogOpen, openDialog, closeDialog }
+  return { isDialogOpen, openDialog, closeDialog }
 })

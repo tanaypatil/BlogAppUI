@@ -69,7 +69,7 @@ router.beforeEach(async (to, from, next) => {
     }
   } else {
     const authDialogStore = useAuthDialogStore()
-    const { isDialogOpen} = storeToRefs(authDialogStore)
+    const { isDialogOpen } = storeToRefs(authDialogStore)
     isDialogOpen.value = true
     next({ name: 'home' })
   }

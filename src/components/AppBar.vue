@@ -21,7 +21,13 @@ const { userLoggedIn, logout } = userStore
 
 <template>
   <v-app-bar class="px-3" color="blue-grey-darken-4">
-    <v-toolbar-title class="text-white"><router-link :to="{ name: 'home' }" style="color: inherit; text-decoration: inherit">Only Blogs</router-link></v-toolbar-title>
+    <v-toolbar-title class="text-white"
+      ><router-link
+        :to="{ name: 'home' }"
+        style="color: inherit; text-decoration: inherit"
+        >Only Blogs</router-link
+      ></v-toolbar-title
+    >
     <v-spacer></v-spacer>
     <v-btn
       title="Toggle Theme"

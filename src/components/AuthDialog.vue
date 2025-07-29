@@ -5,12 +5,10 @@ import { storeToRefs } from 'pinia'
 
 const dialogStore = useAuthDialogStore()
 const { isDialogOpen } = storeToRefs(dialogStore)
-
 </script>
 
 <template>
-  <v-dialog max-width="500"
-  v-model="isDialogOpen">
+  <v-dialog max-width="500" v-model="isDialogOpen">
     <template v-slot:activator="{ props: activatorProps }">
       <v-btn
         icon="mdi-login"

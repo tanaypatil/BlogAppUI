@@ -40,7 +40,7 @@ const onConfirmDelete = async () => {
   <v-container>
     <v-row v-show="showAlert">
       <v-alert
-        :type="alertType=='error' ? 'error' : 'success'"
+        :type="alertType == 'error' ? 'error' : 'success'"
         class="mb-4"
         closable
         @click:close="showAlert = false"
@@ -50,37 +50,25 @@ const onConfirmDelete = async () => {
     </v-row>
     <v-row>
       <v-col cols="2">
-        <v-sheet
-          class="mx-auto"
-          elevation="10"
-        >
-          <v-sheet
-            class="pa-3 bg-blue-grey-darken-4"
-          >
-            Author
-          </v-sheet>
-          <v-img
-            v-if="blog?.profile_picture"
-            :src="blog.profile_picture"
-            cover
-          >
+        <v-sheet class="mx-auto" elevation="10">
+          <v-sheet class="pa-3 bg-blue-grey-darken-4"> Author </v-sheet>
+          <v-img v-if="blog?.profile_picture" :src="blog.profile_picture" cover>
           </v-img>
-          <v-icon v-else class="profile_picture" size="32">mdi-account-circle</v-icon>
+          <v-icon v-else class="profile_picture" size="32"
+            >mdi-account-circle</v-icon
+          >
           <div class="text-center">
             {{ blog?.author }}
           </div>
         </v-sheet>
-        <v-sheet
-          class="pa-3 text-center"
-          v-if="isOwner"
-        >
-          <v-dialog
-            v-model="deleteDialog"
-            max-width="400"
-            persistent
-          >
+        <v-sheet class="pa-3 text-center" v-if="isOwner">
+          <v-dialog v-model="deleteDialog" max-width="400" persistent>
             <template v-slot:activator="{ props: activatorProps }">
-              <v-btn icon="mdi-delete" icon-size="large" v-bind="activatorProps"></v-btn>
+              <v-btn
+                icon="mdi-delete"
+                icon-size="large"
+                v-bind="activatorProps"
+              ></v-btn>
             </template>
 
             <v-card>
@@ -90,18 +78,22 @@ const onConfirmDelete = async () => {
               <template v-slot:actions>
                 <v-spacer></v-spacer>
 
-                <v-btn @click="onConfirmDelete">
-                  Yes, delete it
-                </v-btn>
+                <v-btn @click="onConfirmDelete"> Yes, delete it </v-btn>
 
-                <v-btn @click="deleteDialog = false">
-                  Cancel
-                </v-btn>
+                <v-btn @click="deleteDialog = false"> Cancel </v-btn>
               </template>
             </v-card>
           </v-dialog>
-          <v-divider class="border-opacity-100 ml-1 mr-1" color="white" vertical></v-divider>
-          <router-link style="text-decoration: none; color: inherit" :to="{ name: 'blogEdit', params: { 'slug': blog?.slug }}"><v-btn icon="mdi-pencil" icon-size="large"></v-btn></router-link>
+          <v-divider
+            class="border-opacity-100 ml-1 mr-1"
+            color="white"
+            vertical
+          ></v-divider>
+          <router-link
+            style="text-decoration: none; color: inherit"
+            :to="{ name: 'blogEdit', params: { slug: blog?.slug } }"
+            ><v-btn icon="mdi-pencil" icon-size="large"></v-btn
+          ></router-link>
         </v-sheet>
       </v-col>
       <v-col cols="8">
@@ -116,37 +108,21 @@ const onConfirmDelete = async () => {
         </v-card>
       </v-col>
       <v-col cols="2">
-        <v-sheet
-          class="mx-auto"
-          elevation="10"
-        >
-          <v-sheet
-            class="pa-3 bg-blue-grey-darken-4"
-          >
-            Category
-          </v-sheet>
+        <v-sheet class="mx-auto" elevation="10">
+          <v-sheet class="pa-3 bg-blue-grey-darken-4"> Category </v-sheet>
           <div class="pa-4">
             {{ blog?.category }}
           </div>
         </v-sheet>
-        <v-sheet
-          class="mx-auto"
-          elevation="10"
-        >
-          <v-sheet
-            class="pa-3 bg-blue-grey-darken-4"
-          >
-            Tags
-          </v-sheet>
+        <v-sheet class="mx-auto" elevation="10">
+          <v-sheet class="pa-3 bg-blue-grey-darken-4"> Tags </v-sheet>
 
           <div class="pa-4">
-            <v-chip-group
-              selected-class="text-primary"
-              column
-            >
+            <v-chip-group selected-class="text-primary" column>
               <v-chip
                 v-for="tag in blog?.tags"
-                :key="tag" class="bg-blue-grey-darken-1"
+                :key="tag"
+                class="bg-blue-grey-darken-1"
               >
                 {{ tag }}
               </v-chip>

@@ -1,23 +1,23 @@
-import js from '@eslint/js';
-import vue from 'eslint-plugin-vue';
-import parserVue from 'vue-eslint-parser';
-import tseslint from '@typescript-eslint/eslint-plugin';
-import tsParser from '@typescript-eslint/parser';
-import prettier from 'eslint-plugin-prettier';
+import js from '@eslint/js'
+import vue from 'eslint-plugin-vue'
+import parserVue from 'vue-eslint-parser'
+import tseslint from '@typescript-eslint/eslint-plugin'
+import tsParser from '@typescript-eslint/parser'
+import prettier from 'eslint-plugin-prettier'
 
 export default {
   ignores: ['node_modules/**', 'dist/**'],
   plugins: {
     '@typescript-eslint': tseslint,
     vue: vue,
-    prettier,
+    prettier
   },
   languageOptions: {
     parser: parserVue,
     parserOptions: {
       parser: tsParser,
       ecmaVersion: 2022,
-      sourceType: 'module',
+      sourceType: 'module'
     },
     globals: {
       ...js.configs.recommended.languageOptions?.globals,
@@ -38,7 +38,7 @@ export default {
       FileReader: 'readonly',
       ProgressiveEvent: 'readonly',
       ProgressEvent: 'readonly'
-    },
+    }
   },
   rules: {
     ...js.configs.recommended.rules,
@@ -49,12 +49,12 @@ export default {
     '@typescript-eslint/no-unused-vars': 'error',
     '@typescript-eslint/no-explicit-any': 'warn',
     'vue/component-definition-name-casing': ['error', 'PascalCase'],
-    'vue/component-name-in-template-casing': ['error', 'PascalCase'],
+    'vue/component-name-in-template-casing': ['error', 'PascalCase']
   },
   settings: {
     vue: {
-      version: '3.0',
-    },
+      version: '3.0'
+    }
   },
-  files: ['**/*.js', '**/*.ts', '**/*.vue'],
-};
+  files: ['**/*.js', '**/*.ts', '**/*.vue']
+}

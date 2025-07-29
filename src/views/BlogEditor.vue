@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 import { Field, Form } from 'vee-validate'
 import * as yup from 'yup'
 import { onMounted, ref } from 'vue'
@@ -28,9 +27,9 @@ const formKey = ref(0)
 
 // Simple initial values object
 const initialValues = {
-  title: "",
-  body: "",
-  category: "",
+  title: '',
+  body: '',
+  category: '',
   tags: []
 }
 
@@ -67,13 +66,13 @@ const submitError = ref<string>('')
 const onSubmit = async (values: IBlogForm, { setFieldError }: any) => {
   try {
     let response
-    if(route.params.slug) {
+    if (route.params.slug) {
       response = await updateBlog(route.params.slug, values)
     } else {
       response = await createBlog(values)
     }
     const blog = response.data as Blog
-    await router.push({ name: 'blog', params: { 'slug': blog.slug } })
+    await router.push({ name: 'blog', params: { slug: blog.slug } })
   } catch (error: any) {
     if (error.response?.data) {
       const errorData = error.response.data
@@ -81,17 +80,13 @@ const onSubmit = async (values: IBlogForm, { setFieldError }: any) => {
       if (errorData.title) {
         setFieldError(
           'title',
-          Array.isArray(errorData.title)
-            ? errorData.title[0]
-            : errorData.title
+          Array.isArray(errorData.title) ? errorData.title[0] : errorData.title
         )
       }
       if (errorData.body) {
         setFieldError(
           'body',
-          Array.isArray(errorData.body)
-            ? errorData.body[0]
-            : errorData.body
+          Array.isArray(errorData.body) ? errorData.body[0] : errorData.body
         )
       }
 
@@ -107,9 +102,7 @@ const onSubmit = async (values: IBlogForm, { setFieldError }: any) => {
       if (errorData.tags) {
         setFieldError(
           'tags',
-          Array.isArray(errorData.tags)
-            ? errorData.tags[0]
-            : errorData.tags
+          Array.isArray(errorData.tags) ? errorData.tags[0] : errorData.tags
         )
       }
 
@@ -232,7 +225,7 @@ const onSubmit = async (values: IBlogForm, { setFieldError }: any) => {
             block
             :disabled="!meta.valid || isSubmitting"
             :class="{ submitting: isSubmitting }"
-          >{{ route.params.slug ? 'Update' : 'Create' }}
+            >{{ route.params.slug ? 'Update' : 'Create' }}
           </v-btn>
         </v-row>
       </v-sheet>
@@ -240,6 +233,4 @@ const onSubmit = async (values: IBlogForm, { setFieldError }: any) => {
   </Form>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

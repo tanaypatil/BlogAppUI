@@ -7,7 +7,7 @@ const props = defineProps<{
   body: string
   author: string
   profile_picture: string | null
-  tags: string[],
+  tags: string[]
   category: string
 }>()
 </script>
@@ -38,7 +38,8 @@ const props = defineProps<{
       <template v-else>
         <v-icon class="profile_picture" size="32">mdi-account-circle</v-icon>
       </template>
-      <span class="author-text">{{ props.author }}</span> | <span class="author-text">{{ props.category }}</span>
+      <span class="author-text">{{ props.author }}</span> |
+      <span class="author-text">{{ props.category }}</span>
     </template>
 
     <v-card-text class="bg-surface-light pt-4">
@@ -55,13 +56,11 @@ const props = defineProps<{
       </div>
       <v-spacer></v-spacer>
       <v-sheet class="pa-2">
-        <v-chip-group
-          selected-class="text-primary"
-          column
-        >
+        <v-chip-group selected-class="text-primary" column>
           <v-chip
             v-for="tag in props.tags"
-            :key="tag" class="bg-blue-grey-darken-1"
+            :key="tag"
+            class="bg-blue-grey-darken-1"
           >
             {{ tag }}
           </v-chip>

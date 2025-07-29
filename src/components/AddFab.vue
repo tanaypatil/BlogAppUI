@@ -38,8 +38,19 @@ const createBlog = () => {
   >
     <!--    <v-icon>mdi-plus</v-icon>-->
     <v-icon>{{ open ? 'mdi-close' : 'mdi-plus' }}</v-icon>
-    <v-speed-dial v-model="open" :location="menuLocation" :transition="transition" activator="parent">
-      <v-btn key="1" title="Create Blog" color="success" icon @click="createBlog">
+    <v-speed-dial
+      v-model="open"
+      :location="menuLocation"
+      :transition="transition"
+      activator="parent"
+    >
+      <v-btn
+        key="1"
+        title="Create Blog"
+        color="success"
+        icon
+        @click="createBlog"
+      >
         <v-icon size="24">mdi-plus</v-icon>
       </v-btn>
 
