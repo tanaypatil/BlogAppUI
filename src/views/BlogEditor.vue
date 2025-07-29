@@ -65,7 +65,6 @@ onMounted(async () => {
 const submitError = ref<string>('')
 
 const onSubmit = async (values: IBlogForm, { setFieldError }: any) => {
-  console.log(values)
   try {
     let response
     if(route.params.slug) {

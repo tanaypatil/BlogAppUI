@@ -13,7 +13,6 @@ onMounted(async () => {
   blog.value = await fetchBlog(route.params.slug)
   const userStore = useUserStore()
   const { username } = userStore
-  console.log(username, blog.value?.author)
   isOwner.value = username == blog.value?.author
 })
 

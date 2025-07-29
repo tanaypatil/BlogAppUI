@@ -7,7 +7,6 @@ async function fetchBlogs(
 ): Promise<BlogResponse | null> {
   try {
     const response = await api.get(pageUrl ?? '/blogs/?page=1')
-    console.log(response.data)
     if (response.status === 200) {
       return response.data as BlogResponse
     }
@@ -39,7 +38,6 @@ async function deleteBlog(slug: string) {
 }
 
 async function updateBlog(slug: string, formValues: IBlogForm) {
-  console.log(formValues)
   const formData = new FormData()
   formData.append('title', formValues.title)
   formData.append('body', formValues.body)
