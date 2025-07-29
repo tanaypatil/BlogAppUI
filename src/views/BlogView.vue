@@ -72,7 +72,7 @@ const onConfirmDelete = async () => {
           </div>
         </v-sheet>
         <v-sheet
-          class="pa-3 bg-blue-grey-lighten-3 text-center"
+          class="pa-3 text-center"
           v-if="isOwner"
         >
           <v-dialog
@@ -102,7 +102,7 @@ const onConfirmDelete = async () => {
             </v-card>
           </v-dialog>
           <v-divider class="border-opacity-100 ml-1 mr-1" color="white" vertical></v-divider>
-          <v-btn icon="mdi-pencil" icon-size="large"></v-btn>
+          <router-link style="text-decoration: none; color: inherit" :to="{ name: 'blogEdit', params: { 'slug': blog?.slug }}"><v-btn icon="mdi-pencil" icon-size="large"></v-btn></router-link>
         </v-sheet>
       </v-col>
       <v-col cols="8">

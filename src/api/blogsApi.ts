@@ -24,7 +24,6 @@ async function fetchBlog(slug: string) {
 }
 
 async function createBlog(formValues: IBlogForm) {
-  console.log(formValues)
   const formData = new FormData()
   formData.append('title', formValues.title)
   formData.append('body', formValues.body)
@@ -39,4 +38,16 @@ async function deleteBlog(slug: string) {
   return await api.delete(`/blogs/${slug}/`)
 }
 
-export { fetchBlogs, fetchBlog, createBlog, deleteBlog }
+async function updateBlog(slug: string, formValues: IBlogForm) {
+  console.log(formValues)
+  const formData = new FormData()
+  formData.append('title', formValues.title)
+  formData.append('body', formValues.body)
+  formData.append('category', formValues.category)
+  formValues.tags.forEach(tag => {
+    formData.append('tag_names', tag)
+  })
+  return await api.patch(`/blogs/${slug}/`, formData)
+}
+
+export { fetchBlogs, fetchBlog, createBlog, deleteBlog, updateBlog }

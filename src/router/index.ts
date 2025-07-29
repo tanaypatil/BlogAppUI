@@ -29,6 +29,14 @@ const routes = [
     }
   },
   {
+    path: '/blog/:slug/edit',
+    name: 'blogEdit',
+    component: BlogEditor,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
     path: '/:catchall(.*)*',
     redirect: { name: 'home' }
   }
