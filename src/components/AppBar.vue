@@ -29,6 +29,7 @@ const { userLoggedIn, logout } = userStore
       ></v-toolbar-title
     >
     <v-spacer></v-spacer>
+    <v-btn title="User Profile" icon="mdi-account" slim></v-btn>
     <v-btn
       title="Toggle Theme"
       :icon="theme === 'light' ? 'mdi-weather-sunny' : 'mdi-weather-night'"
