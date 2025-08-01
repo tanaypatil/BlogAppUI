@@ -87,7 +87,7 @@ function onPostComment(comment) {
 
                 <v-btn @click="onConfirmDelete"> Yes, delete it</v-btn>
 
-                <v-btn @click="deleteDialog = false"> Cancel</v-btn>
+                <v-btn @click="deleteDialog = false">Cancel</v-btn>
               </template>
             </v-card>
           </v-dialog>
