@@ -6,6 +6,7 @@ import { useAuthDialogStore } from '../stores/authDialogStore.ts'
 import { storeToRefs } from 'pinia'
 import BlogEditor from '../views/BlogEditor.vue'
 import { fetchBlog } from '../api/blogsApi.ts'
+import UserView from '../views/UserView.vue'
 
 const routes = [
   {
@@ -36,6 +37,14 @@ const routes = [
     meta: {
       requiresAuth: true,
       requiresOwner: true
+    }
+  },
+  {
+    path: '/user',
+    name: 'user',
+    component: UserView,
+    meta: {
+      requiresAuth: true
     }
   },
   {

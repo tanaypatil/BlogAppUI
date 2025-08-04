@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useUserStore } from '../stores/userStore.ts'
 import AuthDialog from './AuthDialog.vue'
+import { useRouter } from 'vue-router'
 
 const props = defineProps<{
   theme: string
@@ -17,6 +18,11 @@ function updateTheme() {
 
 const userStore = useUserStore()
 const { userLoggedIn, logout } = userStore
+
+const router = useRouter()
+const goToUserView = () => {
+  router.push({name: 'user'})
+}
 </script>
 
 <template>
@@ -29,7 +35,7 @@ const { userLoggedIn, logout } = userStore
       ></v-toolbar-title
     >
     <v-spacer></v-spacer>
-    <v-btn title="User Profile" icon="mdi-account" slim></v-btn>
+    <v-btn title="User Profile" icon="mdi-account" @click="goToUserView" slim></v-btn>
     <v-btn
       title="Toggle Theme"
       :icon="theme === 'light' ? 'mdi-weather-sunny' : 'mdi-weather-night'"
